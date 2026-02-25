@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>入居相談＆概算見積シミュレーター | デイサービス にじいろ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ===== 画面1: トップ ===== -->
+  <section id="screen-top" class="screen active">
+    <div class="wrapper top-wrapper">
+      <div class="top-logo">
+        <img src="nijiiro-logo.png" alt="デイサービス にじいろ" class="logo-img">
+      </div>
+      <h1 class="top-title">入居相談＆<br>概算見積シミュレーター</h1>
+      <p class="top-lead">かんたんな質問に答えるだけで、<br>月額費用の目安がわかります。</p>
+      <div class="top-info-box">
+        <p>所要時間：約 <strong>3分</strong></p>
+        <p class="note">こちらは概算の目安です。後から変更・ご相談できます。</p>
+      </div>
+      <button id="btn-start" class="btn btn-primary btn-lg">はじめる</button>
+      <p class="top-facility" id="facility-name-top"></p>
+    </div>
+  </section>
+
+  <!-- ===== 画面2: ステップフォーム ===== -->
+  <section id="screen-form" class="screen">
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-bar"></div>
+    </div>
+    <div class="wrapper">
+      <p class="step-counter" id="step-indicator"></p>
+
+      <!-- Step 1 -->
+      <div class="step" data-step="1">
+        <h2 class="step-heading"><span class="step-num">1</span>目的・時期</h2>
+        <div class="question">
+          <label class="q-label">Q1. ご相談の目的を教えてください</label>
+          <div class="choice-list" id="q-purpose"></div>
+        </div>
+        <div class="question">
+          <label class="q-label">Q2. 入居の希望時期はいつ頃ですか？</label>
+          <div class="choice-list" id="q-timeline"></div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step" data-step="2">
+        <h2 class="step-heading"><span class="step-num">2</span>介護保険</h2>
+        <div class="question">
+          <label class="q-label">Q3. 現在の要介護度を教えてください <button class="help-btn" data-term="要介護度" type="button">？</button></label>
+          <div class="choice-list" id="q-careLevel"></div>
+        </div>
+        <div class="question">
+          <label class="q-label">Q4. 介護保険の自己負担割合は？ <button class="help-btn" data-term="自己負担割合" type="button">？</button></label>
+          <div class="choice-list" id="q-burdenRate"></div>
+        </div>
+        <div class="question">
+          <label class="q-label">Q5. 負担軽減制度に該当しそうですか？ <button class="help-btn" data-term="負担軽減" type="button">？</button></label>
+          <div class="choice-list" id="q-reduction">
+            <label class="choice"><input type="radio" name="reduction" value="yes"><span>該当しそう</span></label>
+            <label class="choice"><input type="radio" name="reduction" value="no"><span>該当しなさそう</span></label>
+            <label class="choice"><input type="radio" name="reduction" value="unknown"><span>不明</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step" data-step="3">
+        <h2 class="step-heading"><span class="step-num">3</span>身体状況</h2>
+        <div class="question">
+          <label class="q-label">Q6. 移動の状態を教えてください</label>
+          <div class="choice-list" id="q-mobility">
+            <label class="choice"><input type="radio" name="mobility" value="independent"><span>自立</span></label>
+            <label class="choice"><input type="radio" name="mobility" value="cane"><span>杖を使用</span></label>
+            <label class="choice"><input type="radio" name="mobility" value="walker"><span>歩行器を使用</span></label>
+            <label class="choice"><input type="radio" name="mobility" value="wheelchair"><span>車椅子</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <label class="q-label">Q7. 食事の介助はどの程度必要ですか？</label>
+          <div class="choice-list" id="q-eating">
+            <label class="choice"><input type="radio" name="eating" value="independent"><span>自立</span></label>
+            <label class="choice"><input type="radio" name="eating" value="partial"><span>一部介助</span></label>
+            <label class="choice"><input type="radio" name="eating" value="full"><span>全介助</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <label class="q-label">Q8. 排泄の介助はどの程度必要ですか？</label>
+          <div class="choice-list" id="q-toilet">
+            <label class="choice"><input type="radio" name="toilet" value="independent"><span>自立</span></label>
+            <label class="choice"><input type="radio" name="toilet" value="partial"><span>一部介助</span></label>
+            <label class="choice"><input type="radio" name="toilet" value="diaper"><span>おむつ中心</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <label class="q-label">Q9. 入浴の介助はどの程度必要ですか？</label>
+          <div class="choice-list" id="q-bathing">
+            <label class="choice"><input type="radio" name="bathing" value="independent"><span>自立</span></label>
+            <label class="choice"><input type="radio" name="bathing" value="partial"><span>一部介助</span></label>
+            <label class="choice"><input type="radio" name="bathing" value="full"><span>全介助</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step" data-step="4">
+        <h2 class="step-heading"><span class="step-num">4</span>認知・医療</h2>
+        <div class="question">
+          <label class="q-label">Q10. 認知症の傾向はありますか？</label>
+          <div class="choice-list" id="q-dementia"></div>
+        </div>
+        <div class="question">
+          <label class="q-label">Q11. 必要な医療的ケアを選んでください（複数選択可）</label>
+          <div class="choice-list choice-list--multi" id="q-medical"></div>
+          <div class="other-input-wrap" id="medical-other-container" style="display:none;">
+            <input type="text" id="medical-other-text" class="text-field" placeholder="その他の内容を入力">
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step" data-step="5">
+        <h2 class="step-heading"><span class="step-num">5</span>プラン選択</h2>
+        <div class="question">
+          <label class="q-label">Q12. 希望のお部屋タイプは？</label>
+          <div class="choice-list" id="q-roomType"></div>
+        </div>
+        <div class="question">
+          <label class="q-label">Q13. お食事の形態は？ <button class="help-btn" data-term="刻み食" type="button">？</button></label>
+          <div class="choice-list" id="q-mealType"></div>
+        </div>
+        <div class="question">
+          <label class="q-label">Q14. 生活支援オプション（複数選択可）</label>
+          <div class="choice-list choice-list--multi" id="q-options"></div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="step" data-step="6">
+        <h2 class="step-heading"><span class="step-num">6</span>結果の共有方法</h2>
+        <div class="question">
+          <label class="q-label">Q15. 結果はどのように確認しますか？</label>
+          <div class="choice-list" id="q-share"></div>
+        </div>
+      </div>
+
+      <div class="form-nav">
+        <button id="btn-prev" class="btn btn-secondary" style="visibility:hidden;">戻る</button>
+        <button id="btn-next" class="btn btn-primary">次へ</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 画面3: 結果 ===== -->
+  <section id="screen-result" class="screen">
+    <div class="wrapper result-wrapper">
+      <h2 class="result-title">シミュレーション結果</h2>
+      <p class="result-note">こちらは概算の目安です。詳細は面談にてご確認ください。</p>
+
+      <!-- 受け入れ目安 -->
+      <div class="card" id="acceptance-card">
+        <h3 class="card-heading">受け入れ目安</h3>
+        <div class="badge" id="acceptance-badge"></div>
+        <ul class="reason-list" id="acceptance-reasons"></ul>
+      </div>
+
+      <!-- 月額概算 -->
+      <div class="card">
+        <h3 class="card-heading">月額費用の概算</h3>
+        <div class="total-display" id="total-amount"></div>
+        <p class="total-sub">（10円単位切り捨て・税込目安）</p>
+
+        <!-- アコーディオン: 内訳 -->
+        <details class="accordion" id="breakdown-accordion">
+          <summary class="accordion-toggle">費用の内訳を見る</summary>
+          <div class="accordion-body" id="breakdown">
+            <div class="breakdown-group">
+              <h4 class="breakdown-label">介護保険自己負担分</h4>
+              <table class="breakdown-tbl" id="breakdown-insurance"></table>
+            </div>
+            <div class="breakdown-group">
+              <h4 class="breakdown-label">介護保険外（自費）</h4>
+              <table class="breakdown-tbl" id="breakdown-non-insurance"></table>
+            </div>
+          </div>
+        </details>
+
+        <div class="notice" id="burden-note" style="display:none;"></div>
+        <div class="notice" id="reduction-note" style="display:none;"></div>
+      </div>
+
+      <!-- 安心テキスト -->
+      <p class="comfort-text">後から変更・ご相談できます。ご不安な点はお気軽にご相談ください。</p>
+
+      <!-- FAQ -->
+      <h3 class="section-title">よくあるご質問</h3>
+      <div class="faq-list" id="faq-cards"></div>
+
+      <!-- 書類 -->
+      <div class="card">
+        <h3 class="card-heading">次回お持ちいただく書類</h3>
+        <ul class="doc-list" id="doc-checklist"></ul>
+      </div>
+
+      <div class="action-group action-group--result">
+        <button id="btn-back-to-form" class="btn btn-secondary">戻る</button>
+        <button id="btn-print" class="btn btn-primary">印刷用まとめを見る</button>
+        <button id="btn-restart" class="btn btn-secondary">最初からやり直す</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 画面4: 印刷用 ===== -->
+  <section id="screen-print" class="screen print-screen">
+    <div class="print-sheet" id="print-content">
+      <div class="print-head">
+        <img src="nijiiro-logo.png" alt="にじいろ" class="print-logo">
+        <div>
+          <h1 class="print-h1">入居相談 概算見積書</h1>
+          <p class="print-date" id="print-date"></p>
+        </div>
+      </div>
+
+      <div class="print-block">
+        <h2 class="print-h2">受け入れ目安</h2>
+        <div id="print-acceptance"></div>
+      </div>
+
+      <div class="print-block">
+        <h2 class="print-h2">月額費用の概算</h2>
+        <div class="print-total" id="print-total"></div>
+        <table class="print-tbl" id="print-breakdown-table"></table>
+      </div>
+
+      <div class="print-block">
+        <h2 class="print-h2">ご相談内容</h2>
+        <table class="print-tbl" id="print-answers-table"></table>
+      </div>
+
+      <div class="print-block">
+        <h2 class="print-h2">次回お持ちいただく書類</h2>
+        <ul class="print-checks" id="print-doc-checklist"></ul>
+      </div>
+
+      <div class="print-block print-caution">
+        <h2 class="print-h2">注意事項（変動要因）</h2>
+        <ul id="print-disclaimers"></ul>
+      </div>
+
+      <div class="print-foot">
+        <p id="print-facility-name"></p>
+        <p>本書面は概算であり、正式な費用はアセスメント後に確定いたします。</p>
+      </div>
+    </div>
+
+    <div class="action-group no-print">
+      <button id="btn-do-print" class="btn btn-primary" onclick="window.print()">この画面を印刷する</button>
+      <button id="btn-back-result" class="btn btn-secondary">結果画面に戻る</button>
+    </div>
+  </section>
+
+  <!-- ===== 用語モーダル ===== -->
+  <div id="glossary-modal" class="modal-bg" style="display:none;">
+    <div class="modal-box" id="modal-box">
+      <div class="modal-top">
+        <h3 id="glossary-term"></h3>
+        <button id="modal-close" class="modal-x" aria-label="閉じる">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <p id="glossary-desc"></p>
+        <div id="glossary-img-wrap" class="glossary-img-wrap" style="display:none;">
+          <img id="glossary-img" class="glossary-img" src="" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

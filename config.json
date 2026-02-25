@@ -1,0 +1,160 @@
+{
+  "facilityName": "にじいろ",
+  "facilityType": "介護付き有料老人ホーム",
+
+  "careLevels": [
+    { "id": "support1",  "label": "要支援1",  "baseCareFeeMonthly": 5460 },
+    { "id": "support2",  "label": "要支援2",  "baseCareFeeMonthly": 9330 },
+    { "id": "care1",     "label": "要介護1",  "baseCareFeeMonthly": 16650 },
+    { "id": "care2",     "label": "要介護2",  "baseCareFeeMonthly": 18570 },
+    { "id": "care3",     "label": "要介護3",  "baseCareFeeMonthly": 20580 },
+    { "id": "care4",     "label": "要介護4",  "baseCareFeeMonthly": 22530 },
+    { "id": "care5",     "label": "要介護5",  "baseCareFeeMonthly": 24480 },
+    { "id": "none",      "label": "未取得（申請中/これから）", "baseCareFeeMonthly": 0 }
+  ],
+
+  "burdenRates": [
+    { "id": "10pct",    "label": "1割", "rate": 0.1 },
+    { "id": "20pct",    "label": "2割", "rate": 0.2 },
+    { "id": "30pct",    "label": "3割", "rate": 0.3 },
+    { "id": "unknown",  "label": "不明", "rate": 0.1, "note": "※不明のため仮に1割で試算しています" }
+  ],
+
+  "burdenReduction": {
+    "discountRate": 0.75,
+    "note": "※負担限度額認定を受けた場合の概算です。実際の軽減額は所得段階により異なります。"
+  },
+
+  "roomTypes": [
+    { "id": "shared",   "label": "多床室",  "housingFeeMonthly": 25650, "description": "4人部屋。費用を抑えたい方向け" },
+    { "id": "privateA", "label": "個室A",   "housingFeeMonthly": 50040, "description": "10畳の個室。洗面台付き" },
+    { "id": "privateB", "label": "個室B",   "housingFeeMonthly": 59100, "description": "12畳の広めの個室。ミニキッチン付き" }
+  ],
+
+  "meals": [
+    { "id": "normal",  "label": "通常",     "mealFeeMonthly": 43350, "addOnMonthly": 0 },
+    { "id": "chopped", "label": "刻み食",   "mealFeeMonthly": 43350, "addOnMonthly": 1500 },
+    { "id": "blended", "label": "ミキサー食", "mealFeeMonthly": 43350, "addOnMonthly": 3000 }
+  ],
+
+  "options": [
+    { "id": "laundry",   "label": "洗濯代行",         "feeMonthly": 5000 },
+    { "id": "bedding",   "label": "寝具リース",       "feeMonthly": 3300 },
+    { "id": "barber",    "label": "理美容（目安）",   "feeMonthly": 2500 },
+    { "id": "recreation","label": "レク強化プラン",   "feeMonthly": 3300 },
+    { "id": "transport", "label": "送迎サービス（目安）", "feeMonthly": 2200 }
+  ],
+
+  "additions": [
+    { "id": "night",   "label": "夜間看護体制加算",   "feeMonthly": 3060, "defaultOn": true },
+    { "id": "nursing", "label": "看護体制加算",       "feeMonthly": 2100, "defaultOn": true },
+    { "id": "rehab",   "label": "個別機能訓練加算",   "feeMonthly": 1500, "defaultOn": true }
+  ],
+
+  "medicalCareItems": [
+    { "id": "insulin",    "label": "インスリン注射",  "requiresConsultation": true, "reason": "医師の指示のもと、看護師による対応が可能か確認が必要です" },
+    { "id": "gastro",     "label": "胃ろう",          "requiresConsultation": true, "reason": "看護体制・医療連携体制の確認が必要です" },
+    { "id": "oxygen",     "label": "在宅酸素",        "requiresConsultation": true, "reason": "酸素供給設備の確認と主治医との連携が必要です" },
+    { "id": "suction",    "label": "たん吸引",        "requiresConsultation": true, "reason": "吸引対応可能なスタッフ体制の確認が必要です" },
+    { "id": "catheter",   "label": "カテーテル",      "requiresConsultation": true, "reason": "管理体制と交換対応の確認が必要です" },
+    { "id": "bedsore",    "label": "褥瘡（じょくそう）ケア", "requiresConsultation": true, "reason": "処置内容に応じた看護体制の確認が必要です" },
+    { "id": "dialysis",   "label": "透析",            "requiresConsultation": true, "reason": "連携医療機関への通院手段の調整が必要です" },
+    { "id": "none",       "label": "特になし",        "requiresConsultation": false, "reason": "" },
+    { "id": "other",      "label": "その他",          "requiresConsultation": true, "reason": "個別にご状況を確認させていただきます" }
+  ],
+
+  "dementia": [
+    { "id": "none",     "label": "なし",   "requiresConsultation": false },
+    { "id": "mild",     "label": "軽度",   "requiresConsultation": false },
+    { "id": "moderate", "label": "中等度", "requiresConsultation": true, "reason": "認知症の進行度に応じた対応体制を確認させていただきます" },
+    { "id": "severe",   "label": "重度",   "requiresConsultation": true, "reason": "専門的なケア体制のご相談が必要です" }
+  ],
+
+  "glossary": {
+    "要介護度": "介護がどれくらい必要かを表す区分です。要支援1〜2、要介護1〜5の7段階があり、数字が大きいほど多くの介護サービスを利用できます。",
+    "自己負担割合": "介護サービスの費用のうち、ご本人が支払う割合です。所得に応じて1割・2割・3割のいずれかになります。多くの方は1割負担です。",
+    "負担軽減": "所得が低い方は「負担限度額認定」により、居住費や食費が軽減される制度があります。お住まいの市区町村に申請が必要です。",
+    "多床室": "複数名（通常4名）で1つのお部屋を使う居室です。費用を抑えられるメリットがあります。",
+    "個室": "お一人で使える居室です。プライバシーが保たれますが、多床室より費用が高くなります。",
+    "刻み食": "食べ物を細かく刻んだ食事形態です。噛む力が弱くなった方向けです。",
+    "ミキサー食": "食べ物をミキサーでペースト状にした食事形態です。飲み込む力が弱い方向けです。",
+    "胃ろう": "お腹に小さな穴を開けて、チューブから直接栄養を送る方法です。口から食事が難しい方が対象です。",
+    "たん吸引": "のどや気管にたまった痰を、機械を使って取り除くケアです。",
+    "褥瘡": "「床ずれ」のことです。長時間同じ姿勢でいることで、皮膚や組織が傷つく状態です。",
+    "カテーテル": "体内に挿入する細い管のことです。尿を排出するための尿道カテーテルなどがあります。",
+    "在宅酸素": "酸素濃縮器などを使って、自宅や施設で酸素を吸入する治療法です。",
+    "インスリン": "糖尿病の治療で使う注射薬です。血糖値を下げる働きがあります。",
+    "透析": "腎臓の働きが低下した方が、機械を使って血液をきれいにする治療です。週に数回、医療機関への通院が必要です。",
+    "夜間看護体制加算": "夜間も看護師が対応できる体制を整えている施設に加算される費用です。",
+    "看護体制加算": "手厚い看護師配置を行っている施設に加算される費用です。",
+    "個別機能訓練加算": "リハビリスタッフが個別の訓練計画を立てて実施する場合の加算費用です。"
+  },
+
+  "glossaryImages": {
+    "要介護度": "image_1.webp",
+    "自己負担割合": "image_2.webp",
+    "負担軽減": "image_3.webp"
+  },
+
+  "faq": [
+    {
+      "question": "入居一時金はかかりますか？",
+      "answer": "当施設では入居一時金は不要です。月額費用のみでご利用いただけます。"
+    },
+    {
+      "question": "入居後に要介護度が変わったら費用はどうなりますか？",
+      "answer": "要介護度が変更された場合、介護保険の自己負担分が変動します。その他の居住費・食費などは変わりません。変更があった場合は改めてご説明いたします。"
+    },
+    {
+      "question": "面会はいつでもできますか？",
+      "answer": "面会時間は9:00〜20:00です。事前のご連絡は不要ですが、感染症流行時は制限させていただく場合があります。"
+    },
+    {
+      "question": "体験入居はできますか？",
+      "answer": "はい、最大7日間の体験入居が可能です。費用は1泊あたり約5,000円（食事込み）です。お気軽にご相談ください。"
+    },
+    {
+      "question": "持ち込みできるものはありますか？",
+      "answer": "お気に入りの家具や写真、テレビなど、お部屋に入る範囲でお持ち込みいただけます。詳細は見学時にご案内いたします。"
+    }
+  ],
+
+  "documentsToBring": [
+    { "label": "介護保険被保険者証", "note": "要介護認定を受けている方" },
+    { "label": "介護保険負担割合証", "note": "自己負担割合の確認に必要です" },
+    { "label": "健康保険証", "note": "コピーでも可" },
+    { "label": "お薬手帳（または薬の一覧）", "note": "現在服用中のお薬の確認のため" },
+    { "label": "診療情報提供書（紹介状）", "note": "かかりつけ医がある場合" },
+    { "label": "負担限度額認定証", "note": "お持ちの方のみ" },
+    { "label": "身元引受人の身分証明書", "note": "ご家族等" },
+    { "label": "印鑑", "note": "契約手続き時に必要" }
+  ],
+
+  "purposes": [
+    { "id": "visit",   "label": "見学したい" },
+    { "id": "reserve", "label": "仮予約を検討中" },
+    { "id": "apply",   "label": "本申込を考えている" },
+    { "id": "info",    "label": "まずは情報収集" }
+  ],
+
+  "timelines": [
+    { "id": "asap",     "label": "すぐにでも" },
+    { "id": "1month",   "label": "1ヶ月以内" },
+    { "id": "3months",  "label": "3ヶ月以内" },
+    { "id": "undecided","label": "未定・まだわからない" }
+  ],
+
+  "shareOptions": [
+    { "id": "print", "label": "印刷して持ち帰りたい" },
+    { "id": "line",  "label": "LINEで受け取りたい" },
+    { "id": "email", "label": "メールで受け取りたい" }
+  ],
+
+  "disclaimers": [
+    "本シミュレーションは概算であり、正式な費用は個別のアセスメント後に確定いたします。",
+    "介護報酬改定や施設の体制変更により、料金が変動する場合があります。",
+    "食費・居住費は所得段階に応じた負担限度額認定により軽減される場合があります。",
+    "加算項目は入居時の状態やサービス内容により変わることがあります。",
+    "医療的ケアの対応可否は、主治医との連携・施設体制により個別に判断いたします。"
+  ]
+}
