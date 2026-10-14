@@ -92,6 +92,43 @@ body {
 }
 
 /* ==========================================================
+   画面0: パスワードロック
+   ========================================================== */
+.lock-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 100dvh;
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+.lock-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 28px;
+  color: var(--sub);
+}
+.lock-form {
+  width: 100%;
+  max-width: 320px;
+}
+.lock-input {
+  text-align: center;
+  font-size: 1.125rem;
+  margin-bottom: 12px;
+}
+.lock-error {
+  font-size: 0.875rem;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.lock-btn {
+  width: 100%;
+}
+
+/* ==========================================================
    Buttons (2 types only)
    ========================================================== */
 .btn {

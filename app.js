@@ -26,7 +26,11 @@
     }
     buildDynamicUI();
     bindEvents();
-    showScreen('screen-top');
+    if (sessionStorage.getItem('nijiiro_unlocked')) {
+      showScreen('screen-top');
+    } else {
+      showScreen('screen-lock');
+    }
     document.getElementById('facility-name-top').textContent =
       CONFIG.facilityName + '（' + CONFIG.facilityType + '）';
   }
@@ -435,6 +439,23 @@
 
   /* ---------- Events ---------- */
   function bindEvents() {
+    document.getElementById('btn-unlock').addEventListener('click', handleUnlock);
+    document.getElementById('lock-password').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') handleUnlock();
+    });
+
+    function handleUnlock() {
+      var pw = document.getElementById('lock-password').value;
+      if (pw === 'nijiiro') {
+        sessionStorage.setItem('nijiiro_unlocked', '1');
+        showScreen('screen-top');
+      } else {
+        document.getElementById('lock-error').style.display = 'block';
+        document.getElementById('lock-password').value = '';
+        document.getElementById('lock-password').focus();
+      }
+    }
+
     document.getElementById('btn-start').addEventListener('click', function () {
       showScreen('screen-form'); showStep(1);
     });
