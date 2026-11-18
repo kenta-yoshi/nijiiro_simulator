@@ -1,6 +1,7 @@
-# 入居相談＆概算見積シミュレーター
+# ご利用料金 概算シミュレーター
 
-デイサービス にじいろ 向けの入居相談・月額概算見積シミュレーター（MVP）です。
+デイサービス にじいろ 向けの利用料金シミュレーターです。
+エリア・要介護度・自己負担割合から、「1日利用（夕食あり／なし）」と「1ヶ月宿泊」の概算料金を表示します。
 面談時にPC/タブレットで使用し、ご家族がスマホで後から見返すことを想定した設計です。
 
 ## 起動方法
@@ -78,27 +79,37 @@ nijiiro_simulator/
 
 ## config.json の編集ガイド
 
+料金はエリアごとに `areas[].pricing` へ持たせています。
+
 | 変更内容 | 編集箇所 |
 |---------|---------|
-| 介護度別の基本サービス費 | `careLevels[].baseCareFeeMonthly` |
-| 居住費（部屋タイプ別） | `roomTypes[].housingFeeMonthly` |
-| 食費 | `meals[].mealFeeMonthly` / `meals[].addOnMonthly` |
-| 生活支援オプション | `options[].feeMonthly` |
-| 加算のON/OFF | `additions[].defaultOn` を `true` / `false` |
-| 加算の金額 | `additions[].feeMonthly` |
-| 負担軽減の割引率 | `burdenReduction.discountRate` |
-| FAQ | `faq[]` の `question` / `answer`（先頭3件が表示） |
-| 用語説明 | `glossary` のキーと値 |
-| 持参書類 | `documentsToBring[]` の `label` / `note` |
-| 注意事項 | `disclaimers[]` |
+| エリアの追加・公開 | `areas[]` に `pricing` を追加し `available` を `true` に |
+| 地域単価（1単位あたりの円） | `areas[].pricing.unitPrice` |
+| 計算に使う時間区分 | `areas[].pricing.serviceTimeId`（`serviceTimes[].id` から選択） |
+| 介護度別の単位数 | `areas[].pricing.serviceTimes[].units` |
+| 昼食・夕食・宿泊代 | `areas[].pricing.fees` |
+| 1ヶ月の日数・泊数 | `areas[].pricing.monthly` |
+| 区分支給限度額（全国共通） | `careLevels[].limitUnits` |
+| 用語説明 | `glossary` / `glossaryImages` |
+| 持参書類 | `documentsToBring[]` |
+| 注意書き・注意事項 | `notes` / `disclaimers[]` |
 
 ## 計算ロジック（概要）
 
 ```
-介護保険自己負担分 = (基本サービス費 + 加算合計) × 自己負担割合
-保険外費用 = 居住費 + 食費 + 食事形態加算 + オプション合計
-月額合計 = 介護保険自己負担分 + 保険外費用
-※ 10円単位で切り捨て
+費用        = 単位数 × 地域単価（1円未満切り捨て）
+利用者負担額 = 費用 −（費用 × 保険給付割合（1円未満切り捨て））
+
+① 1日利用
+  夕食なし = 利用者負担額 + 昼食代
+  夕食あり = 利用者負担額 + 昼食代 + 夕食代
+
+② 1ヶ月宿泊
+  月間単位数 = 1日の単位数 × 日数
+  限度額内   → 1〜3割負担
+  限度額超過 → 全額自己負担（10割）
+  月額合計 = 上記 + 宿泊代×泊数 + 昼食代×日数 + 夕食代×日数
+※ 各種加算（入浴介助・処遇改善など）は含めていません
 ```
 
 ## 次の改善案
@@ -108,5 +119,5 @@ nijiiro_simulator/
 - [ ] メール送信機能（SendGrid / Resend）
 - [ ] 相談履歴の保存（localStorage / Supabase）
 - [ ] 管理画面（config.json の GUI 編集）
-- [ ] 複数施設対応
+- [ ] 北海道・静岡・福岡エリアの料金データ登録
 - [ ] アクセス解析（離脱ステップの把握）
