@@ -144,7 +144,7 @@
 
   function calculate() {
     var area = findById(CONFIG.areas, answers.area);
-    var p    = area.pricing;
+    var p    = area.pricing || findById(CONFIG.areas, area.pricingFrom).pricing;
     var cl   = findById(CONFIG.careLevels, answers.careLevel);
     var br   = findById(CONFIG.burdenRates, answers.burdenRate);
     var st   = findById(p.serviceTimes, p.serviceTimeId);

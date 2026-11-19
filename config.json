@@ -29,9 +29,9 @@
         "monthly": { "days": 30, "nights": 30 }
       }
     },
-    { "id": "hokkaido", "label": "北海道エリア", "available": false },
-    { "id": "shizuoka", "label": "静岡エリア",   "available": false },
-    { "id": "fukuoka",  "label": "福岡エリア",   "available": false }
+    { "id": "hokkaido", "label": "北海道エリア", "available": true, "pricingFrom": "yokohama" },
+    { "id": "shizuoka", "label": "静岡エリア",   "available": true, "pricingFrom": "yokohama" },
+    { "id": "fukuoka",  "label": "福岡エリア",   "available": true, "pricingFrom": "yokohama" }
   ],
 
   "usageTypes": [

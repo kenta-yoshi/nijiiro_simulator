@@ -84,6 +84,7 @@ nijiiro_simulator/
 | 変更内容 | 編集箇所 |
 |---------|---------|
 | エリアの追加・公開 | `areas[]` に `pricing` を追加し `available` を `true` に |
+| 他エリアと同じ料金を使う | `areas[].pricingFrom` に参照先エリアの `id` を指定（独自料金にするときは `pricing` に置き換え） |
 | 地域単価（1単位あたりの円） | `areas[].pricing.unitPrice` |
 | 計算に使う時間区分 | `areas[].pricing.serviceTimeId`（`serviceTimes[].id` から選択） |
 | 介護度別の単位数 | `areas[].pricing.serviceTimes[].units` |
