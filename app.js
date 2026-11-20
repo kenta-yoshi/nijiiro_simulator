@@ -8,6 +8,7 @@
   var currentStep = 1;
   var TOTAL_STEPS = 3;
   var answers = {};
+  var lastResult = null;
 
   /* ---------- Init ---------- */
   async function init() {
@@ -206,6 +207,7 @@
   /* ---------- Render Result ---------- */
   function renderResult() {
     var c = calculate();
+    lastResult = c;
 
     document.getElementById('result-heading').textContent = c.heading;
     document.getElementById('result-conditions').textContent =
@@ -265,7 +267,212 @@
   }
 
   /* ---------- Download as image ---------- */
+  // 結果をcanvasに直接描く。文字幅の計測と描画を同じcanvasで行うため、ブラウザ差で文字が重ならない
+  var IMG = {
+    W: 720, PAD: 24, SCALE: 2,
+    font: "'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', sans-serif",
+    text: '#333333', sub: '#666666', border: '#E5E5E5', line: '#f0f0f0',
+    sec: '#F7F9F8', primary: '#8DBD3C', accent: '#D84F83', accentBg: '#fdf0f4'
+  };
+  var NO_LINE_START = '、。，．）」』】％・ー！？';
+
   function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+  function paintResult(ctx, c, logo) {
+    var W = IMG.W, PAD = IMG.PAD, y = 32;
+
+    function font(size, bold) { ctx.font = (bold ? '600 ' : '400 ') + size + 'px ' + IMG.font; }
+    function wrap(str, maxW) {
+      var lines = [], cur = '';
+      for (var i = 0; i < str.length; i++) {
+        var ch = str[i];
+        if (cur && ctx.measureText(cur + ch).width > maxW && NO_LINE_START.indexOf(ch) === -1) {
+          lines.push(cur); cur = ch;
+        } else { cur += ch; }
+      }
+      if (cur) lines.push(cur);
+      return lines;
+    }
+    // 折り返して描画し、描いた高さを返す
+    function para(str, x, top, maxW, o) {
+      font(o.size, o.bold);
+      var lh = Math.round(o.size * (o.lh || 1.6));
+      var lines = wrap(str, maxW);
+      ctx.fillStyle = o.color || IMG.text;
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = o.align || 'left';
+      var tx = o.align === 'center' ? x + maxW / 2 : (o.align === 'right' ? x + maxW : x);
+      lines.forEach(function (ln, i) { ctx.fillText(ln, tx, top + lh * i + lh / 2); });
+      return lines.length * lh;
+    }
+    function paraHeight(str, maxW, o) {
+      font(o.size, o.bold);
+      return wrap(str, maxW).length * Math.round(o.size * (o.lh || 1.6));
+    }
+    function box(x, top, w, h, r, fill, stroke) {
+      ctx.beginPath();
+      ctx.moveTo(x + r[0], top);
+      ctx.arcTo(x + w, top, x + w, top + h, r[1]);
+      ctx.arcTo(x + w, top + h, x, top + h, r[2]);
+      ctx.arcTo(x, top + h, x, top, r[3]);
+      ctx.arcTo(x, top, x + w, top, r[0]);
+      ctx.closePath();
+      if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+      if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1; ctx.stroke(); }
+    }
+    function hline(x, top, w, color, lw) {
+      ctx.fillStyle = color; ctx.fillRect(x, top, w, lw || 1);
+    }
+    function filledNote(str, x, top, w, o) {
+      var h = paraHeight(str, w - 28, o) + 24;
+      box(x, top, w, h, [14, 14, 14, 14], o.bg);
+      para(str, x + 14, top + 12, w - 28, o);
+      return h;
+    }
+    // 「約 1,807 円/日」のように大きさの違う文字を、幅を測って順に並べる
+    function amount(parts, rightX, midY) {
+      var widths = parts.map(function (p) { font(p.size, p.bold); return ctx.measureText(p.t).width; });
+      var x = rightX - widths.reduce(function (a, b) { return a + b; }, 0);
+      ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.fillStyle = IMG.text;
+      parts.forEach(function (p, i) {
+        font(p.size, p.bold);
+        ctx.fillText(p.t, x, midY);
+        x += widths[i];
+      });
+    }
+    function amountWidth(parts) {
+      return parts.reduce(function (sum, p) { font(p.size, p.bold); return sum + ctx.measureText(p.t).width; }, 0);
+    }
+    function money(v) { return typeof v === 'number' ? yen(v) + '円' : v; }
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, W, 100000);
+
+    if (logo) {
+      var lh = 64, lw = logo.naturalWidth * lh / logo.naturalHeight;
+      ctx.drawImage(logo, (W - lw) / 2, y, lw, lh);
+      y += lh + 20;
+    }
+
+    y += para('シミュレーション結果', PAD, y, W - PAD * 2, { size: 22, bold: true, align: 'center' }) + 10;
+    y += filledNote('こちらは概算の目安です。詳細はご相談時にご確認ください。', PAD, y, W - PAD * 2,
+      { size: 14, color: IMG.sub, align: 'center', bg: IMG.sec }) + 24;
+
+    /* --- 料金カード --- */
+    var cardTop = y, cx = PAD + 24, cw = W - PAD * 2 - 48;
+    y += 24;
+    y += para(c.heading, cx, y, cw, { size: 16, bold: true }) + 10;
+    hline(cx, y, cw, IMG.border); y += 16;
+    y += para(c.areaLabel + '／' + c.clLabel + '／' + c.brLabel + '負担', cx, y, cw,
+      { size: 14, color: IMG.sub, align: 'center' }) + 8;
+
+    if (c.totals.length === 1) {
+      var parts = [{ t: '約 ', size: 32, bold: true }, { t: yen(c.totals[0].amount), size: 32, bold: true },
+                   { t: ' ' + c.unit, size: 15 }];
+      amount(parts, cx + cw / 2 + amountWidth(parts) / 2, y + 42);
+      y += 60;
+    } else {
+      c.totals.forEach(function (t, i) {
+        font(15, true); ctx.fillStyle = IMG.text; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+        ctx.fillText(t.label, cx, y + 36);
+        amount([{ t: '約 ', size: 24, bold: true }, { t: yen(t.amount), size: 24, bold: true },
+                { t: ' ' + c.unit, size: 14 }], cx + cw, y + 36);
+        y += 54;
+        if (i < c.totals.length - 1) hline(cx, y, cw, IMG.line);
+      });
+      y += 4;
+    }
+    y += para('（概算・目安）', cx, y, cw, { size: 13, color: IMG.sub, align: 'center' }) + 16;
+
+    /* --- 内訳 --- */
+    var bTop = y, bx = cx + 16, bw = cw - 32;
+    box(cx, y, cw, 48, [14, 14, 0, 0], IMG.sec);
+    para('費用の内訳', bx, y + 12, bw, { size: 15, bold: true });
+    y += 48 + 16;
+
+    function group(title, rows, subtotal) {
+      y += para(title, bx, y, bw, { size: 14, bold: true, color: IMG.sub }) + 6;
+      rows.concat(subtotal === undefined ? [] : [{ label: '小計', val: subtotal, sub: true }]).forEach(function (r) {
+        if (r.sub) { hline(bx, y, bw, IMG.border, 2); y += 2; }
+        var v = money(r.val);
+        font(14, true);
+        var vw = ctx.measureText(v).width;
+        var top = y + 8;
+        var h = para(r.label, bx, top, bw - vw - 20, { size: 14, bold: !!r.sub });
+        font(14, true); ctx.fillStyle = IMG.text; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+        ctx.fillText(v, bx + bw, top + h / 2);
+        y = top + h + 8;
+        if (!r.sub) hline(bx, y, bw, IMG.line);
+      });
+      y += 14;
+    }
+    group('介護保険サービス費', c.insRows, c.insRows.length > 1 ? c.insSubtotal : undefined);
+    group('介護保険外（実費）', c.nonRows, c.nonSubtotal);
+    y += 2;
+    box(cx, bTop, cw, y - bTop, [14, 14, 14, 14], null, IMG.border);
+    y += 14;
+
+    c.notes.forEach(function (n) {
+      y += filledNote(n, cx, y, cw, { size: 13, color: IMG.accent, bg: IMG.accentBg }) + 12;
+    });
+    y += 12;
+    box(PAD, cardTop, W - PAD * 2, y - cardTop, [16, 16, 16, 16], null, IMG.border);
+    y += 24;
+
+    y += para('ご不安な点はお気軽にご相談ください。', PAD, y, W - PAD * 2,
+      { size: 15, color: IMG.sub, align: 'center' }) + 24;
+
+    /* --- 書類カード --- */
+    cardTop = y; y += 24;
+    y += para('ご相談時にお持ちいただく書類', cx, y, cw, { size: 16, bold: true }) + 10;
+    hline(cx, y, cw, IMG.border); y += 8;
+    CONFIG.documentsToBring.forEach(function (d, i) {
+      y += 12;
+      box(cx, y + 3, 20, 20, [4, 4, 4, 4], null, '#cccccc');
+      y += para(d.label, cx + 32, y, cw - 32, { size: 15, bold: true });
+      y += para(d.note, cx + 32, y, cw - 32, { size: 13, color: IMG.sub }) + 12;
+      if (i < CONFIG.documentsToBring.length - 1) hline(cx, y, cw, IMG.line);
+    });
+    y += 12;
+    box(PAD, cardTop, W - PAD * 2, y - cardTop, [16, 16, 16, 16], null, IMG.border);
+    y += 24;
+
+    /* --- 注意事項 --- */
+    y += para('注意事項', PAD, y, W - PAD * 2, { size: 15, bold: true }) + 6;
+    CONFIG.disclaimers.forEach(function (d) {
+      para('※', PAD, y, 18, { size: 13, color: IMG.sub });
+      y += para(d, PAD + 18, y, W - PAD * 2 - 18, { size: 13, color: IMG.sub }) + 6;
+    });
+    y += 14;
+    hline(PAD, y, W - PAD * 2, IMG.border); y += 12;
+    y += para(document.getElementById('result-foot').textContent, PAD, y, W - PAD * 2,
+      { size: 13, color: IMG.sub, align: 'center' });
+
+    return y + 28;
+  }
+
+  function loadLogo() {
+    return new Promise(function (resolve) {
+      var img = new Image();
+      img.onload = function () { resolve(img); };
+      img.onerror = function () { resolve(null); };
+      img.src = 'nijiiro-logo.png';
+    });
+  }
+
+  async function buildResultCanvas() {
+    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+    var logo = await loadLogo();
+    var probe = document.createElement('canvas');
+    var height = paintResult(probe.getContext('2d'), lastResult, logo);
+    var canvas = document.createElement('canvas');
+    canvas.width = IMG.W * IMG.SCALE;
+    canvas.height = Math.ceil(height) * IMG.SCALE;
+    var ctx = canvas.getContext('2d');
+    ctx.scale(IMG.SCALE, IMG.SCALE);
+    paintResult(ctx, lastResult, logo);
+    return canvas;
+  }
 
   async function downloadResultImage() {
     var btn = document.getElementById('btn-download');
@@ -273,11 +480,7 @@
     btn.disabled = true;
     btn.textContent = '画像を作成中…';
     try {
-      document.getElementById('breakdown-accordion').open = true;
-      if (document.fonts && document.fonts.ready) await document.fonts.ready;
-      var canvas = await html2canvas(document.getElementById('result-capture'), {
-        scale: 2, backgroundColor: '#ffffff', useCORS: true
-      });
+      var canvas = await buildResultCanvas();
       var blob = await new Promise(function (resolve) { canvas.toBlob(resolve, 'image/png'); });
       var now = new Date();
       var a = document.createElement('a');
