@@ -11,7 +11,7 @@
         "serviceName": "地域密着型通所介護費",
         "regionGrade": "2級地",
         "unitPrice": 10.72,
-        "serviceTimeId": "h7_8",
+        "serviceTimeId": "h8_9",
         "serviceTimes": [
           { "id": "h3_4", "label": "3時間以上4時間未満", "units": { "care1": 416, "care2": 478, "care3": 540,  "care4": 600,  "care5": 663 } },
           { "id": "h4_5", "label": "4時間以上5時間未満", "units": { "care1": 436, "care2": 501, "care3": 566,  "care4": 629,  "care5": 695 } },
