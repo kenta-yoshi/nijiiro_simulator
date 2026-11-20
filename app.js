@@ -262,8 +262,6 @@
     var now = new Date();
     document.getElementById('result-foot').textContent = CONFIG.facilityName + '　' +
       now.getFullYear() + '年' + (now.getMonth() + 1) + '月' + now.getDate() + '日 作成';
-
-    document.getElementById('breakdown-accordion').open = true;
   }
 
   /* ---------- Download as image ---------- */
