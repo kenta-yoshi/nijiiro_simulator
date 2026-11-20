@@ -26,7 +26,7 @@
 </head>
 <body>
   <main>
-    <img id="logo" class="logo" src="/nijiiro-logo.png" alt="デイサービス にじいろ">
+    <img id="logo" class="logo" src="/images/nijiiro-logo.png" alt="デイサービス にじいろ">
     <h1>ページが見つかりません</h1>
     <p>お探しのページは移動したか、URLが間違っている可能性があります。</p>
     <a id="home" class="btn" href="/">料金シミュレーターを開く</a>
@@ -36,7 +36,7 @@
     if (/\.github\.io$/.test(location.hostname)) {
       var base = '/' + location.pathname.split('/')[1] + '/';
       document.getElementById('home').href = base;
-      document.getElementById('logo').src = base + 'nijiiro-logo.png';
+      document.getElementById('logo').src = base + 'images/nijiiro-logo.png';
     }
   </script>
 </body>

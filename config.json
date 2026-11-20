@@ -71,8 +71,8 @@
   },
 
   "glossaryImages": {
-    "要介護度": "image_1.webp",
-    "自己負担割合": "image_2.webp"
+    "要介護度": "images/image_1.webp",
+    "自己負担割合": "images/image_2.webp"
   },
 
   "documentsToBring": [

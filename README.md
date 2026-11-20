@@ -70,15 +70,20 @@ php -S localhost:8000
 ```
 nijiiro_simulator/
 ├── index.html        ... メインHTML（トップ・質問・結果。パスワード画面は github.io でのみ表示）
-├── styles.css        ... スタイルシート（3段階レスポンシブ）
-├── app.js            ... アプリケーションロジック
-├── config.json       ... 料金・FAQ・用語などの設定データ
-├── nijiiro-logo.png  ... ロゴ画像
-├── ogp.jpg           ... OGP画像（LINE等で共有したときのカード画像）
-├── favicon.ico / icon-192.png / apple-touch-icon.png ... アイコン
 ├── 404.html          ... 存在しないURLを開いたときの案内ページ
-├── htaccess.txt      ... 本番サーバーの .htaccess に追記する設定（https転送・404・キャッシュ）
+├── config.json       ... 料金・用語・お問合せ先などの設定データ
 ├── robots.txt        ... 検索エンジンのクロール拒否
+├── favicon.ico       ... ブラウザのタブ用アイコン（慣例でルートに置く）
+├── css/
+│   └── styles.css    ... スタイルシート（3段階レスポンシブ）
+├── js/
+│   └── app.js        ... アプリケーションロジック
+├── images/
+│   ├── nijiiro-logo.png      ... ロゴ
+│   ├── image_1.webp / image_2.webp ... 用語解説のイラスト
+│   ├── ogp.jpg               ... OGP画像（LINE等で共有したときのカード画像）
+│   └── icon-192.png / apple-touch-icon.png ... アイコン
+├── htaccess.txt      ... 本番サーバーの .htaccess 用の設定（https転送・404・キャッシュ）
 └── README.md         ... このファイル
 ```
 
@@ -104,7 +109,7 @@ nijiiro_simulator/
 ## 更新時の注意（キャッシュ）
 
 - `config.json` は毎回サーバーに更新確認をするため、アップロードすればすぐ反映されます。
-- `app.js` / `styles.css` を変更したときは、`index.html` 内の `?v=YYYYMMDD` の数字を更新してください（古いファイルが端末に残るのを防ぐため）。
+- `js/app.js` / `css/styles.css` を変更したときは、`index.html` 内の `?v=YYYYMMDD` の数字を更新してください（古いファイルが端末に残るのを防ぐため）。
 - 本番サーバーの `.htaccess` は heteml の「アクセス制限」設定と共用です。上書きせず `htaccess.txt` の内容を追記してください。
 
 ## 計算ロジック（概要）

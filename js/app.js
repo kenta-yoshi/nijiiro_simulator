@@ -464,7 +464,7 @@
       var img = new Image();
       img.onload = function () { resolve(img); };
       img.onerror = function () { resolve(null); };
-      img.src = 'nijiiro-logo.png';
+      img.src = 'images/nijiiro-logo.png';
     });
   }
 
