@@ -13,7 +13,8 @@
   /* ---------- Init ---------- */
   async function init() {
     try {
-      var res = await fetch('config.json');
+      // 料金改定がすぐ反映されるよう、毎回サーバーに最新かどうか確認する
+      var res = await fetch('config.json', { cache: 'no-cache' });
       CONFIG = await res.json();
     } catch (e) {
       document.body.innerHTML =
@@ -35,6 +36,13 @@
       showScreen('screen-top');
     }
     document.getElementById('facility-name-top').textContent = CONFIG.facilityName;
+    if (CONFIG.contact && CONFIG.contact.url) {
+      var contactBtn = document.getElementById('btn-contact');
+      contactBtn.href = CONFIG.contact.url;
+      contactBtn.textContent = CONFIG.contact.label;
+      document.getElementById('contact-note').textContent = CONFIG.contact.note || '';
+      document.getElementById('contact-cta').style.display = '';
+    }
   }
 
   /* ---------- Dynamic UI Build ---------- */

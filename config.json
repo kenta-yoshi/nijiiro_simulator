@@ -1,6 +1,12 @@
 {
   "facilityName": "デイサービス にじいろ",
 
+  "contact": {
+    "label": "見学・ご利用のお問合せをする",
+    "url": "https://liff.line.me/2012239914-sTHg45xI?liff_id=2012239914-sTHg45xI&code=LFPTRD8X",
+    "note": "LINEのお問合せフォームが開きます"
+  },
+
   "areas": [
     {
       "id": "yokohama",

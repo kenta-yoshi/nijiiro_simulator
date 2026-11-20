@@ -1,0 +1,24 @@
+# ==========================================================
+# simulator.nijiiro-ds.com 用のサーバー設定
+# サーバー上の .htaccess に「追記」して使う（上書きしないこと）
+# ※ heteml の「アクセス制限」（Basic認証）の設定が同じ .htaccess に
+#    書かれているため、上書きすると認証が外れて公開状態になる
+# ==========================================================
+
+# http でのアクセスを https へ転送
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+</IfModule>
+
+# 存在しないURLを開いたときの案内ページ
+ErrorDocument 404 /404.html
+
+# 料金データ等を更新したとき、古い内容が端末に残らないようにする
+# （毎回サーバーへ更新の有無を確認し、変更がなければ手元のデータを使う）
+<IfModule mod_headers.c>
+<FilesMatch "\.(html|json|js|css)$">
+Header set Cache-Control "no-cache"
+</FilesMatch>
+</IfModule>

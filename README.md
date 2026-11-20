@@ -74,6 +74,11 @@ nijiiro_simulator/
 ├── app.js            ... アプリケーションロジック
 ├── config.json       ... 料金・FAQ・用語などの設定データ
 ├── nijiiro-logo.png  ... ロゴ画像
+├── ogp.jpg           ... OGP画像（LINE等で共有したときのカード画像）
+├── favicon.ico / icon-192.png / apple-touch-icon.png ... アイコン
+├── 404.html          ... 存在しないURLを開いたときの案内ページ
+├── htaccess.txt      ... 本番サーバーの .htaccess に追記する設定（https転送・404・キャッシュ）
+├── robots.txt        ... 検索エンジンのクロール拒否
 └── README.md         ... このファイル
 ```
 
@@ -91,9 +96,16 @@ nijiiro_simulator/
 | 昼食・夕食・宿泊代 | `areas[].pricing.fees` |
 | 1ヶ月の日数・泊数 | `areas[].pricing.monthly` |
 | 区分支給限度額（全国共通） | `careLevels[].limitUnits` |
+| お問合せボタンの文言・リンク先 | `contact`（`url` を空にするとボタン非表示） |
 | 用語説明 | `glossary` / `glossaryImages` |
 | 持参書類 | `documentsToBring[]` |
 | 注意書き・注意事項 | `notes` / `disclaimers[]` |
+
+## 更新時の注意（キャッシュ）
+
+- `config.json` は毎回サーバーに更新確認をするため、アップロードすればすぐ反映されます。
+- `app.js` / `styles.css` を変更したときは、`index.html` 内の `?v=YYYYMMDD` の数字を更新してください（古いファイルが端末に残るのを防ぐため）。
+- 本番サーバーの `.htaccess` は heteml の「アクセス制限」設定と共用です。上書きせず `htaccess.txt` の内容を追記してください。
 
 ## 計算ロジック（概要）
 

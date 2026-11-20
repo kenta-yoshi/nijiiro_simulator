@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>ページが見つかりません｜デイサービス にじいろ</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+      color: #333; background: #fff; line-height: 1.8;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 40px 24px; text-align: center;
+    }
+    .logo { width: 160px; height: auto; margin-bottom: 28px; }
+    h1 { font-size: 1.375rem; margin-bottom: 12px; }
+    p { color: #666; margin-bottom: 28px; }
+    a.btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 56px; padding: 14px 40px; border-radius: 14px;
+      background: #8DBD3C; color: #fff; font-weight: 600; font-size: 1.0625rem;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <img id="logo" class="logo" src="/nijiiro-logo.png" alt="デイサービス にじいろ">
+    <h1>ページが見つかりません</h1>
+    <p>お探しのページは移動したか、URLが間違っている可能性があります。</p>
+    <a id="home" class="btn" href="/">料金シミュレーターを開く</a>
+  </main>
+  <script>
+    // テスト環境（GitHub Pages）はサブフォルダ配下で動くため、リンク先を合わせる
+    if (/\.github\.io$/.test(location.hostname)) {
+      var base = '/' + location.pathname.split('/')[1] + '/';
+      document.getElementById('home').href = base;
+      document.getElementById('logo').src = base + 'nijiiro-logo.png';
+    }
+  </script>
+</body>
+</html>

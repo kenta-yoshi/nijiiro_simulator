@@ -654,6 +654,22 @@ body {
 }
 .btn:disabled { opacity: .6; cursor: default; }
 
+/* お問合せボタン（結果画面の最下部） */
+.contact-cta { margin-top: 20px; text-align: center; }
+.btn-contact {
+  width: 100%;
+  min-height: 72px;
+  padding: 16px 24px;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  color: #fff;
+  background: #06C755;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(6,199,85,.3);
+}
+.btn-contact:hover { background: #05b34c; }
+.contact-note { margin-top: 8px; font-size: 0.8125rem; color: var(--sub); }
+
 /* ==========================================================
    Responsive — tablet (601-1024)
    ========================================================== */
