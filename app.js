@@ -251,51 +251,48 @@
       dl.appendChild(li);
     });
 
-    renderPrint(c);
+    var di = document.getElementById('result-disclaimers');
+    di.innerHTML = '';
+    CONFIG.disclaimers.forEach(function (d) {
+      var li = document.createElement('li'); li.textContent = d; di.appendChild(li);
+    });
+
+    var now = new Date();
+    document.getElementById('result-foot').textContent = CONFIG.facilityName + '　' +
+      now.getFullYear() + '年' + (now.getMonth() + 1) + '月' + now.getDate() + '日 作成';
+
+    document.getElementById('breakdown-accordion').open = true;
   }
 
-  /* ---------- Render Print ---------- */
-  function renderPrint(c) {
-    var now = new Date();
-    document.getElementById('print-date').textContent =
-      now.getFullYear() + '年' + (now.getMonth() + 1) + '月' + now.getDate() + '日 作成';
-    document.getElementById('print-facility-name').textContent = CONFIG.facilityName;
-    document.getElementById('print-heading').textContent = c.heading + '（概算）';
+  /* ---------- Download as image ---------- */
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
 
-    var at = document.getElementById('print-answers-table');
-    at.innerHTML = '';
-    [['エリア', c.areaLabel], ['ご利用方法', c.usageLabel],
-     ['要介護度', c.clLabel], ['自己負担割合', c.brLabel]
-    ].forEach(function (p) {
-      var r = document.createElement('tr');
-      r.innerHTML = '<th>' + esc(p[0]) + '</th><td style="text-align:left;">' + esc(p[1]) + '</td>';
-      at.appendChild(r);
-    });
-
-    var t = document.getElementById('print-breakdown-table');
-    t.innerHTML = '<tr><th>項目</th><td>金額</td></tr>';
-    c.insRows.concat(c.nonRows).forEach(function (d) { prow(t, d.label, d.val); });
-    c.totals.forEach(function (tt) {
-      var tr = document.createElement('tr');
-      tr.className = 'total-row';
-      tr.innerHTML = '<th>' + esc(tt.label) + '</th><td>約 ' + yen(tt.amount) + '円</td>';
-      t.appendChild(tr);
-    });
-
-    var pd = document.getElementById('print-doc-checklist');
-    pd.innerHTML = '';
-    CONFIG.documentsToBring.forEach(function (d) {
-      var li = document.createElement('li'); li.textContent = d.label; pd.appendChild(li);
-    });
-
-    var di = document.getElementById('print-disclaimers');
-    di.innerHTML = '';
-    c.notes.filter(function (n) { return n !== CONFIG.notes.additions; })
-      .map(function (n) { return n.replace(/^※/, ''); })
-      .concat(CONFIG.disclaimers)
-      .forEach(function (d) {
-        var li = document.createElement('li'); li.textContent = d; di.appendChild(li);
+  async function downloadResultImage() {
+    var btn = document.getElementById('btn-download');
+    var label = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '画像を作成中…';
+    try {
+      document.getElementById('breakdown-accordion').open = true;
+      if (document.fonts && document.fonts.ready) await document.fonts.ready;
+      var canvas = await html2canvas(document.getElementById('result-capture'), {
+        scale: 2, backgroundColor: '#ffffff', useCORS: true
       });
+      var blob = await new Promise(function (resolve) { canvas.toBlob(resolve, 'image/png'); });
+      var now = new Date();
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'nijiiro_ryokin_' + now.getFullYear() + pad2(now.getMonth() + 1) + pad2(now.getDate()) + '.png';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 10000);
+    } catch (e) {
+      alert('画像の作成に失敗しました。お手数ですが、画面のスクリーンショットをご利用ください。');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = label;
+    }
   }
 
   /* ---------- Helpers ---------- */
@@ -304,11 +301,6 @@
     var tr = document.createElement('tr');
     if (sub) tr.className = 'subtotal';
     tr.innerHTML = '<td>' + esc(lbl) + '</td><td>' + money(val) + '</td>';
-    tbl.appendChild(tr);
-  }
-  function prow(tbl, lbl, val) {
-    var tr = document.createElement('tr');
-    tr.innerHTML = '<th>' + esc(lbl) + '</th><td>' + money(val) + '</td>';
     tbl.appendChild(tr);
   }
   function yen(n) { return Math.round(n).toLocaleString('ja-JP'); }
@@ -347,13 +339,7 @@
       if (currentStep > 1) showStep(currentStep - 1);
     });
 
-    document.getElementById('btn-print').addEventListener('click', function () {
-      showScreen('screen-print');
-    });
-
-    document.getElementById('btn-back-result').addEventListener('click', function () {
-      showScreen('screen-result');
-    });
+    document.getElementById('btn-download').addEventListener('click', downloadResultImage);
 
     document.getElementById('btn-back-to-form').addEventListener('click', function () {
       showScreen('screen-form');

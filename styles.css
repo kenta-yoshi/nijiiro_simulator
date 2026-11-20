@@ -643,99 +643,36 @@ body {
 }
 
 /* ==========================================================
-   画面4: 印刷用
+   結果画面: 注意事項・画像保存
    ========================================================== */
-.print-screen { background: var(--bg); }
-.print-sheet {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 32px 24px;
+.result-capture {
+  background: var(--bg);
+  padding: 16px;
+  margin: -16px;
 }
-.print-head {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 28px;
-  padding-bottom: 16px;
-  border-bottom: 3px solid var(--primary);
-}
-.print-logo { width: 72px; height: auto; }
-.print-h1   { font-size: 1.25rem; font-weight: 600; }
-.print-date  { font-size: 0.875rem; color: var(--sub); }
-
-.print-block { margin-bottom: 24px; }
-.print-h2 {
-  font-size: 1rem; font-weight: 600;
-  margin-bottom: 8px;
-  padding-bottom: 4px;
-  border-bottom: 1px solid var(--border);
-}
-.print-total {
-  text-align: center;
-  font-size: 1.5rem;
+.caution-block { margin-bottom: 20px; }
+.caution-heading {
+  font-size: 0.9375rem;
   font-weight: 600;
-  margin: 8px 0 14px;
+  margin-bottom: 6px;
 }
-.print-tbl {
-  width: 100%; border-collapse: collapse;
-  font-size: 0.875rem;
-}
-.print-tbl th, .print-tbl td {
-  padding: 6px 8px;
-  border-bottom: 1px solid #eee;
-  text-align: left;
-}
-.print-tbl th { background: var(--bg-sec); font-weight: 600; width: 45%; }
-.print-tbl td { text-align: right; }
-.print-tbl td:first-child { text-align: left; }
-.print-tbl .total-row { font-weight: 600; border-top: 2px solid var(--primary); }
-
-.print-checks {
-  list-style: none;
-  columns: 2; column-gap: 24px;
-}
-.print-checks li {
-  font-size: 0.875rem;
-  padding: 4px 0 4px 24px;
-  position: relative;
-  break-inside: avoid;
-}
-.print-checks li::before {
-  content: "\2610";
-  position: absolute; left: 0;
-  font-size: 1rem;
-}
-
-.print-caution ul { list-style: none; }
-.print-caution li {
+.caution-list { list-style: none; }
+.caution-list li {
   font-size: 0.8125rem;
   color: var(--sub);
   padding: 3px 0 3px 18px;
   position: relative;
   line-height: 1.6;
 }
-.print-caution li::before { content: "※"; position: absolute; left: 0; }
-
-.print-foot {
-  margin-top: 28px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
+.caution-list li::before { content: "※"; position: absolute; left: 0; }
+.result-foot {
   text-align: center;
   font-size: 0.8125rem;
   color: var(--sub);
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
 }
-
-/* ==========================================================
-   Print media
-   ========================================================== */
-@media print {
-  .no-print { display: none !important; }
-  .screen { display: none !important; }
-  .screen.print-screen.active { display: block !important; }
-  body { background: #fff; }
-  .print-sheet { padding: 12px; max-width: 100%; }
-  @page { size: A4; margin: 12mm; }
-}
+.btn:disabled { opacity: .6; cursor: default; }
 
 /* ==========================================================
    Responsive — tablet (601-1024)
@@ -774,6 +711,4 @@ body {
 
   .card { padding: 32px; }
   .result-title { font-size: 1.5rem; }
-
-  .print-sheet { padding: 40px 32px; }
 }

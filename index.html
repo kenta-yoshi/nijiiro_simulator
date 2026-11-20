@@ -93,6 +93,7 @@
   <!-- ===== 画面3: 結果 ===== -->
   <section id="screen-result" class="screen">
     <div class="wrapper result-wrapper">
+     <div id="result-capture" class="result-capture">
       <h2 class="result-title">シミュレーション結果</h2>
       <p class="result-note">こちらは概算の目安です。詳細はご相談時にご確認ください。</p>
 
@@ -102,7 +103,7 @@
         <div id="total-amount"></div>
         <p class="total-sub">（概算・目安）</p>
 
-        <details class="accordion" id="breakdown-accordion">
+        <details class="accordion" id="breakdown-accordion" open>
           <summary class="accordion-toggle">費用の内訳を見る</summary>
           <div class="accordion-body" id="breakdown">
             <div class="breakdown-group">
@@ -126,54 +127,19 @@
         <ul class="doc-list" id="doc-checklist"></ul>
       </div>
 
+      <div class="caution-block">
+        <h3 class="caution-heading">注意事項</h3>
+        <ul class="caution-list" id="result-disclaimers"></ul>
+      </div>
+
+      <p class="result-foot" id="result-foot"></p>
+     </div>
+
       <div class="action-group action-group--result">
         <button id="btn-back-to-form" class="btn btn-secondary">戻る</button>
-        <button id="btn-print" class="btn btn-primary">印刷用まとめを見る</button>
+        <button id="btn-download" class="btn btn-primary">結果を画像でダウンロードする</button>
         <button id="btn-restart" class="btn btn-secondary">最初からやり直す</button>
       </div>
-    </div>
-  </section>
-
-  <!-- ===== 画面4: 印刷用 ===== -->
-  <section id="screen-print" class="screen print-screen">
-    <div class="print-sheet" id="print-content">
-      <div class="print-head">
-        <img src="nijiiro-logo.png" alt="にじいろ" class="print-logo">
-        <div>
-          <h1 class="print-h1">ご利用料金 概算見積書</h1>
-          <p class="print-date" id="print-date"></p>
-        </div>
-      </div>
-
-      <div class="print-block">
-        <h2 class="print-h2">ご相談内容</h2>
-        <table class="print-tbl" id="print-answers-table"></table>
-      </div>
-
-      <div class="print-block">
-        <h2 class="print-h2" id="print-heading"></h2>
-        <table class="print-tbl" id="print-breakdown-table"></table>
-      </div>
-
-      <div class="print-block">
-        <h2 class="print-h2">ご相談時にお持ちいただく書類</h2>
-        <ul class="print-checks" id="print-doc-checklist"></ul>
-      </div>
-
-      <div class="print-block print-caution">
-        <h2 class="print-h2">注意事項</h2>
-        <ul id="print-disclaimers"></ul>
-      </div>
-
-      <div class="print-foot">
-        <p id="print-facility-name"></p>
-        <p>本書面は概算であり、正式な費用はご利用内容の確認後に確定いたします。</p>
-      </div>
-    </div>
-
-    <div class="action-group no-print">
-      <button id="btn-do-print" class="btn btn-primary" onclick="window.print()">この画面を印刷する</button>
-      <button id="btn-back-result" class="btn btn-secondary">結果画面に戻る</button>
     </div>
   </section>
 
@@ -193,6 +159,7 @@
     </div>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
