@@ -27,10 +27,12 @@
     }
     buildDynamicUI();
     bindEvents();
-    if (sessionStorage.getItem('nijiiro_unlocked')) {
-      showScreen('screen-top');
-    } else {
+    // テスト環境（GitHub Pages）だけ簡易ロックをかける。本番はサーバー側で制御する
+    var isTestSite = /\.github\.io$/.test(location.hostname);
+    if (isTestSite && !sessionStorage.getItem('nijiiro_unlocked')) {
       showScreen('screen-lock');
+    } else {
+      showScreen('screen-top');
     }
     document.getElementById('facility-name-top').textContent = CONFIG.facilityName;
   }

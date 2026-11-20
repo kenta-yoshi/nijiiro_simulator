@@ -69,7 +69,7 @@ php -S localhost:8000
 
 ```
 nijiiro_simulator/
-├── index.html        ... メインHTML（ロック・トップ・質問・結果の4画面）
+├── index.html        ... メインHTML（トップ・質問・結果。パスワード画面は github.io でのみ表示）
 ├── styles.css        ... スタイルシート（3段階レスポンシブ）
 ├── app.js            ... アプリケーションロジック
 ├── config.json       ... 料金・FAQ・用語などの設定データ
